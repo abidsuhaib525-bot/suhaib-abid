@@ -169,10 +169,10 @@ export function Hero() {
           </div>
           
           <div className="flex flex-col gap-2 md:gap-4 mb-12 overflow-hidden">
-            <h1 ref={nameRef1} className="font-sans text-[80px] md:text-[130px] lg:text-[180px] font-bold tracking-tight text-white leading-[0.9] opacity-0">
+            <h1 ref={nameRef1} className="font-sans text-[70px] sm:text-[80px] md:text-[130px] lg:text-[180px] font-bold tracking-tight text-white leading-[0.9] opacity-0">
               SUHAIB
             </h1>
-            <h1 ref={nameRef2} className="font-sans text-[80px] md:text-[130px] lg:text-[180px] font-bold tracking-tight text-white leading-[0.9] opacity-0">
+            <h1 ref={nameRef2} className="font-sans text-[70px] sm:text-[80px] md:text-[130px] lg:text-[180px] font-bold tracking-tight text-white leading-[0.9] opacity-0">
               ABID
             </h1>
           </div>

@@ -180,7 +180,7 @@ export function Education() {
         
         {/* Common Gradients */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/40 to-transparent w-full md:w-[90%]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303] opacity-70 md:opacity-100 pointer-events-none" />
       </div>
 
       {/* Main Content Container */}
@@ -208,7 +208,7 @@ export function Education() {
               </span>
             </div>
             
-            <h2 className="edu-reveal font-sans text-6xl md:text-8xl font-bold tracking-tighter leading-none flex items-start gap-4 opacity-0 text-white drop-shadow-lg">
+            <h2 className="edu-reveal font-sans text-[50px] sm:text-[60px] md:text-8xl font-bold tracking-tighter leading-none flex items-start gap-4 opacity-0 text-white drop-shadow-lg">
               EDUCATION
               <Circle className="w-4 h-4 md:w-6 md:h-6 text-white/20 mt-2 md:mt-4 hidden sm:block" strokeWidth={1.5} />
             </h2>

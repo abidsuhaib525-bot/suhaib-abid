@@ -207,7 +207,7 @@ export function About() {
               </span>
             </div>
             
-            <h2 className="about-reveal font-sans text-[80px] md:text-[100px] lg:text-[120px] font-bold tracking-tighter leading-[0.8] flex flex-col opacity-0">
+            <h2 className="about-reveal font-sans text-[60px] sm:text-[80px] md:text-[100px] lg:text-[120px] font-bold tracking-tighter leading-[0.8] flex flex-col opacity-0">
               <span className="text-white drop-shadow-lg">ABOUT</span>
               <span className="text-white/10 drop-shadow-sm">ME</span>
             </h2>
