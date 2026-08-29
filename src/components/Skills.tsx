@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, MouseEvent as ReactMouseEvent } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -38,14 +38,17 @@ const coreStrengths = [
 
 export function Skills() {
   const containerRef = useRef<HTMLElement>(null);
+  const bgImageRef = useRef<HTMLDivElement>(null);
+  const particlesRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // 1. Cinematic Background Parallax
+      // 1. Cinematic Background Scroll Parallax
       gsap.fromTo(
-        ".skills-bg",
-        { y: "-3%", scale: 1.05 },
+        bgImageRef.current,
+        { y: "-5%", scale: 1.05 },
         {
           scrollTrigger: {
             trigger: containerRef.current,
@@ -53,7 +56,7 @@ export function Skills() {
             end: "bottom top",
             scrub: true,
           },
-          y: "3%",
+          y: "5%",
           scale: 1.05,
           ease: "none",
         }
@@ -78,7 +81,7 @@ export function Skills() {
 
       // 3. Cards Reveal
       gsap.fromTo(
-        ".skill-card",
+        cardsRef.current,
         { y: 50, opacity: 0 },
         {
           scrollTrigger: {
@@ -111,8 +114,36 @@ export function Skills() {
 
     }, containerRef);
 
-    return () => ctx.revert();
+    // Mouse Parallax Effect for Background (Similar to Hero)
+    const handleWindowMouseMove = (e: MouseEvent) => {
+      if (window.innerWidth < 768) return;
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      
+      gsap.to(bgImageRef.current, { x: x * -15, y: y * -15, duration: 2.5, ease: "power2.out" });
+      gsap.to(particlesRef.current, { x: x * -30, y: y * -30, duration: 2.5, ease: "power2.out" });
+    };
+
+    window.addEventListener("mousemove", handleWindowMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleWindowMouseMove);
+      ctx.revert();
+    };
   }, []);
+
+  // Mouse tracking for the premium card glass glow effect
+  const handleCardMouseMove = (e: ReactMouseEvent<HTMLDivElement>, index: number) => {
+    const card = cardsRef.current[index];
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    card.style.setProperty("--mouse-x", `${x}px`);
+    card.style.setProperty("--mouse-y", `${y}px`);
+  };
 
   return (
     <section 
@@ -121,10 +152,10 @@ export function Skills() {
       className="relative w-full min-h-screen bg-[#030303] flex items-center overflow-hidden py-32"
     >
       {/* Cinematic Background Layer */}
-      <div className="absolute inset-0 z-0 skills-bg">
+      <div className="absolute inset-0 z-0">
         
-        {/* Desktop Background */}
-        <div className="hidden md:block absolute inset-0">
+        {/* Desktop Background with Parallax Ref */}
+        <div ref={bgImageRef} className="hidden md:block absolute inset-[-5%] w-[110%] h-[110%]">
           <Image 
             src="/skill.png" 
             alt="Cinematic Space Floating Crystals" 
@@ -145,8 +176,11 @@ export function Skills() {
           />
         </div>
 
+        {/* Subtle Atmospheric Dust / Particles */}
+        <div ref={particlesRef} className="absolute inset-[-10%] w-[120%] h-[120%] z-0 opacity-30 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent bg-[length:40px_40px] pointer-events-none" />
+
         {/* Common Gradients for transitions and text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/60 to-transparent w-full" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/60 to-transparent w-full pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303] opacity-80 pointer-events-none" />
       </div>
 
@@ -191,17 +225,40 @@ export function Skills() {
           </div>
 
           {/* Cards Grid */}
-          <div className="skills-grid grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-12 mt-4">
+          <div className="skills-grid grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-12 mt-6">
             {skillCategories.map((category, index) => (
               <div 
                 key={index}
-                className="skill-card relative flex flex-col items-center p-8 md:p-10 rounded-2xl bg-black/40 backdrop-blur-md border border-white/[0.05] opacity-0 group hover:border-white/10 transition-colors duration-500"
+                ref={(el) => {
+                  cardsRef.current[index] = el;
+                }}
+                onMouseMove={(e) => handleCardMouseMove(e, index)}
+                className="skill-card relative flex flex-col items-center p-8 md:p-10 rounded-2xl bg-[#030303]/40 backdrop-blur-md border border-white/[0.08] opacity-0 group transition-colors duration-500 hover:border-white/20 hover:bg-[#030303]/60 overflow-hidden"
               >
+                {/* Dynamic Mouse Glow Overlay */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                     style={{
+                       background: "radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.08), transparent 40%)"
+                     }}
+                />
+
+                {/* Top Border Masking Trick for Sci-Fi Shape */}
+                {/* This dark background hides the straight top border of the card directly underneath the hexagon */}
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-20 h-4 bg-[#030303] z-0" />
+                
+                {/* Tech Joint Dots */}
+                <div className="absolute top-[-2px] left-[calc(50%-45px)] w-1 h-1 bg-white/30 rounded-full" />
+                <div className="absolute top-[-2px] right-[calc(50%-45px)] w-1 h-1 bg-white/30 rounded-full" />
+
                 {/* Hexagon Icon Overlapping Top Border */}
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2">
+                <div className="absolute -top-7 left-1/2 -translate-x-1/2 z-10 group-hover:-translate-y-1 transition-transform duration-500">
                   <div className="relative w-14 h-14 flex items-center justify-center">
-                    <Hexagon className="absolute inset-0 w-full h-full text-white/20 group-hover:text-white/40 transition-colors duration-500" strokeWidth={1} />
-                    <category.icon className="w-5 h-5 text-white/80 group-hover:text-white transition-colors duration-500 z-10" strokeWidth={1.5} />
+                    {/* The glowing hexagon border */}
+                    <Hexagon className="absolute inset-0 w-full h-full text-white/20 group-hover:text-white/50 transition-colors duration-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" strokeWidth={1} />
+                    {/* Solid background inside hexagon to hide card border */}
+                    <div className="absolute inset-1 bg-[#030303] rounded-full z-[-1]" style={{ clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)" }}></div>
+                    {/* The icon */}
+                    <category.icon className="w-5 h-5 text-white/80 group-hover:text-white transition-colors duration-500 z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" strokeWidth={1.5} />
                   </div>
                 </div>
 
@@ -209,7 +266,7 @@ export function Skills() {
                 <div className="absolute top-1/2 -translate-y-1/2 -left-[5px] w-[9px] h-[9px] rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.9)] border-2 border-[#030303]" />
 
                 {/* Inner Content */}
-                <div className="flex flex-col items-center text-center w-full mt-4">
+                <div className="flex flex-col items-center text-center w-full mt-6 relative z-10">
                   
                   <h3 className="text-white text-[11px] md:text-xs font-mono tracking-[0.3em] uppercase mb-4">
                     {category.title}
@@ -226,7 +283,7 @@ export function Skills() {
                     {category.skills.map((skill, sIndex) => (
                       <span 
                         key={sIndex} 
-                        className="px-3 py-1.5 rounded-md bg-white/[0.03] border border-white/[0.05] text-[10px] text-white/50 tracking-wider transition-colors group-hover:border-white/10 group-hover:text-white/70"
+                        className="px-3 py-1.5 rounded-md bg-white/[0.02] border border-white/[0.05] text-[10px] text-white/50 tracking-wider transition-all duration-300 group-hover:border-white/15 group-hover:bg-white/[0.05] group-hover:text-white/80"
                       >
                         {skill}
                       </span>
@@ -234,9 +291,9 @@ export function Skills() {
                   </div>
 
                   {/* Explore Link */}
-                  <div className="mt-auto flex items-center gap-3 opacity-40 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="mt-auto flex items-center gap-3 opacity-40 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
                     <span className="text-[9px] uppercase tracking-[0.3em] font-mono text-white">Explore</span>
-                    <span className="text-white text-xs">→</span>
+                    <span className="text-white text-xs group-hover:translate-x-1 transition-transform duration-300">→</span>
                   </div>
                   
                 </div>
@@ -245,7 +302,7 @@ export function Skills() {
           </div>
 
           {/* Bottom Panel (Core Strengths) */}
-          <div className="strengths-panel w-full mt-12 p-8 md:p-10 rounded-2xl border border-white/[0.05] bg-black/40 backdrop-blur-md flex flex-col lg:flex-row gap-12 opacity-0 overflow-hidden relative">
+          <div className="strengths-panel w-full mt-12 p-8 md:p-10 rounded-2xl border border-white/[0.08] bg-[#030303]/40 backdrop-blur-md flex flex-col lg:flex-row gap-12 opacity-0 overflow-hidden relative group hover:border-white/15 transition-colors duration-500">
             <div className="absolute inset-0 bg-gradient-to-r from-white/[0.02] to-transparent pointer-events-none" />
             
             {/* Left: Quote */}
@@ -259,7 +316,7 @@ export function Skills() {
                   Skills are the tools, <br/> creativity is the weapon.
                 </p>
               </div>
-              <div className="mt-2 text-white/40 font-serif italic text-3xl tracking-tight -rotate-3 opacity-80">
+              <div className="mt-2 text-white/40 font-serif italic text-3xl tracking-tight -rotate-3 opacity-80 group-hover:text-white/60 transition-colors duration-500">
                 Suhaib Abid
               </div>
             </div>
