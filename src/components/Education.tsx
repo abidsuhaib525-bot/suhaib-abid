@@ -1,0 +1,348 @@
+"use client";
+
+import { useRef, useEffect } from "react";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { GraduationCap, BookOpen, Award, Medal, Target, Sparkles, Circle } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const educationData = [
+  {
+    startYear: "2025",
+    endYear: "2029",
+    tag: "BACHELOR OF SCIENCE",
+    degree: "Artificial Intelligence",
+    institution: "National University of Modern Languages",
+    campus: "Faisalabad Campus",
+    badgeLabel: "CGPA",
+    badgeValue: "3.69",
+    badgeMax: "/ 4.00",
+    icon: GraduationCap
+  },
+  {
+    startYear: "2023",
+    endYear: "2025",
+    tag: "HIGHER SECONDARY",
+    degree: "ICS (Computer Science)",
+    institution: "Alley College",
+    campus: "Faisalabad",
+    badgeLabel: "GRADE",
+    badgeValue: "A+",
+    badgeMax: "",
+    icon: BookOpen
+  },
+  {
+    startYear: "2021",
+    endYear: "2023",
+    tag: "SECONDARY EDUCATION",
+    degree: "Matriculation (Science)",
+    institution: "Chiniot Islamia School & College",
+    campus: "Boys Campus",
+    badgeLabel: "GRADE",
+    badgeValue: "A+",
+    badgeMax: "",
+    icon: Award
+  }
+];
+
+export function Education() {
+  const containerRef = useRef<HTMLElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    const ctx = gsap.context(() => {
+      
+      // 1. Cinematic Background Parallax (Extremely subtle to make it feel far away)
+      gsap.fromTo(
+        ".edu-bg",
+        { y: "-2%", scale: 1.05 },
+        {
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+          y: "2%",
+          scale: 1.05,
+          ease: "none",
+        }
+      );
+
+      // 2. Header Fade In
+      gsap.fromTo(
+        ".edu-reveal",
+        { y: 30, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 75%",
+          },
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          stagger: 0.15,
+          ease: "power2.out",
+        }
+      );
+
+      // 3. Timeline Progress Line Scrub
+      gsap.fromTo(
+        lineRef.current,
+        { scaleY: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".edu-timeline-container",
+            start: "top 60%",
+            end: "bottom 80%",
+            scrub: 1,
+          },
+          scaleY: 1,
+          ease: "none",
+        }
+      );
+
+      // 4. Timeline Cards Focus Scrub
+      const baseOpacity = isMobile ? 0.5 : 0.3;
+      gsap.utils.toArray(".edu-card").forEach((el: any) => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: el,
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: true,
+          }
+        });
+        
+        tl.fromTo(el, 
+          { opacity: baseOpacity, borderColor: "rgba(255,255,255,0.02)", scale: 0.98 }, 
+          { opacity: 1, borderColor: "rgba(255,255,255,0.15)", scale: 1, duration: 1, ease: "power1.inOut" }
+        ).to(el, 
+          { opacity: baseOpacity, borderColor: "rgba(255,255,255,0.02)", scale: 0.98, duration: 1, ease: "power1.inOut" }
+        );
+      });
+
+      // 5. Highlight Bar Entry
+      gsap.fromTo(
+        ".edu-highlights",
+        { y: 50, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".edu-highlights",
+            start: "top 90%",
+          },
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          ease: "power3.out",
+        }
+      );
+
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section 
+      id="education" 
+      ref={containerRef} 
+      className="relative w-full min-h-screen bg-[#030303] flex items-center overflow-hidden"
+    >
+      {/* Cinematic Background Layer (Animated by GSAP) */}
+      <div className="absolute inset-0 z-0 edu-bg">
+        
+        {/* Desktop Background Layer */}
+        <div className="hidden md:block absolute inset-0">
+          <Image 
+            src="/education.png" 
+            alt="Sci-Fi Cinematic Planet Behind Mountains" 
+            fill 
+            priority
+            className="object-cover object-[85%_center] 2xl:object-right opacity-100"
+          />
+        </div>
+
+        {/* Mobile-Specific Background Layer (Art-Directed for 9:16) */}
+        {/* Uses a 120vw container to prevent massive zooming, keeping moon small and distant */}
+        <div className="md:hidden absolute top-[15vh] right-0 w-[120vw] h-[120vw] opacity-90">
+          <Image 
+            src="/education.png" 
+            alt="Sci-Fi Cinematic Planet Behind Mountains Mobile" 
+            fill 
+            priority
+            className="object-contain object-right"
+          />
+        </div>
+        
+        {/* Common Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/40 to-transparent w-full md:w-[90%]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-50" />
+      </div>
+
+      {/* Main Content Container */}
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-24 w-full h-full relative z-10 flex flex-col justify-center py-32">
+        
+        {/* Vertical Editorial Indicator */}
+        <div className="hidden lg:flex absolute left-6 lg:left-12 top-0 bottom-0 flex-col justify-between items-center py-20 opacity-30 pointer-events-none">
+          <span className="text-[9px] tracking-[0.4em] font-mono text-white whitespace-nowrap rotate-[-90deg] origin-center">
+            SEC 03 / EDUCATION
+          </span>
+          <div className="w-[1px] h-32 bg-white/20"></div>
+          <span className="text-[9px] tracking-[0.4em] font-mono text-white whitespace-nowrap rotate-[-90deg] origin-center">
+            SCROLL TO EXPLORE
+          </span>
+        </div>
+
+        {/* Content Wrapper */}
+        <div className="w-full lg:w-[65%] flex flex-col gap-16 lg:ml-20">
+          
+          {/* Header */}
+          <div className="flex flex-col gap-4">
+            <div className="edu-reveal flex items-center gap-4 opacity-0">
+              <span className="text-white/40 text-[9px] font-mono tracking-[0.4em] uppercase">
+                // MY JOURNEY
+              </span>
+            </div>
+            
+            <h2 className="edu-reveal font-sans text-6xl md:text-8xl font-bold tracking-tighter leading-none flex items-start gap-4 opacity-0 text-white drop-shadow-lg">
+              EDUCATION
+              <Circle className="w-4 h-4 md:w-6 md:h-6 text-white/20 mt-2 md:mt-4 hidden sm:block" strokeWidth={1.5} />
+            </h2>
+            
+            <p className="edu-reveal text-white/50 text-sm md:text-base leading-relaxed font-light mt-4 max-w-sm opacity-0">
+              Every chapter has shaped me.<br/>
+              Every lesson has prepared me for<br/>
+              the challenges ahead.
+            </p>
+          </div>
+
+          {/* Timeline Section */}
+          <div className="edu-timeline-container relative w-full pl-20 sm:pl-28 md:pl-32 flex flex-col gap-12 mt-4">
+            
+            {/* Base Vertical Line (Dim) */}
+            <div className="absolute top-4 bottom-4 left-[60px] sm:left-[80px] w-[1px] bg-white/5" />
+            
+            {/* Animated Glowing Progress Line */}
+            <div 
+              ref={lineRef}
+              className="absolute top-4 bottom-4 left-[60px] sm:left-[80px] w-[1px] bg-gradient-to-b from-white via-white/50 to-transparent origin-top scale-y-0 shadow-[0_0_15px_rgba(255,255,255,0.5)]" 
+            />
+
+            {/* Education Items */}
+            {educationData.map((item, index) => (
+              <div key={index} className="relative flex items-center w-full">
+                
+                {/* Year Label (Left of Line) */}
+                <div className="absolute right-[calc(100%+32px)] text-right w-16 md:w-20 hidden sm:block">
+                  <span className="block text-white/90 text-lg md:text-xl font-medium tracking-tight">
+                    {item.startYear}
+                  </span>
+                  <span className="block text-white/30 text-[10px] md:text-xs font-mono tracking-widest mt-1">
+                    – {item.endYear}
+                  </span>
+                </div>
+
+                {/* Mobile Year Label (Top of Card) */}
+                <div className="sm:hidden absolute -top-6 left-12 text-white/40 text-[10px] font-mono tracking-widest">
+                  {item.startYear} – {item.endYear}
+                </div>
+
+                {/* Glowing Dot on Line */}
+                <div className="absolute left-[-21px] sm:left-[1px] -translate-x-[50%] w-[5px] h-[5px] bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+                <div className="absolute left-[-21px] sm:left-[1px] -translate-x-[50%] w-3 h-3 border border-white/20 rounded-full" />
+
+                {/* Timeline Card */}
+                <div className="edu-card w-full ml-8 sm:ml-12 p-5 md:p-7 rounded-xl border border-white/[0.05] bg-black/40 backdrop-blur-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 opacity-0 relative overflow-hidden group">
+                  
+                  {/* Subtle hover gradient inside card */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  {/* Left Side: Icon + Content */}
+                  <div className="flex items-start sm:items-center gap-5 md:gap-6 z-10 w-full sm:w-auto">
+                    {/* Icon Circle */}
+                    <div className="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-full border border-white/10 bg-white/[0.02] items-center justify-center">
+                      <item.icon className="w-5 h-5 text-white/70" strokeWidth={1.5} />
+                    </div>
+                    
+                    {/* Text Details */}
+                    <div className="flex flex-col gap-1.5">
+                      <span className="text-[9px] md:text-[10px] text-white/40 uppercase tracking-[0.2em] font-mono">
+                        {item.tag}
+                      </span>
+                      <h3 className="text-white text-lg md:text-xl font-medium tracking-tight">
+                        {item.degree}
+                      </h3>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-white/40 text-xs md:text-sm font-light">
+                        <span>{item.institution}</span>
+                        <span className="hidden sm:block text-white/20">•</span>
+                        <span>{item.campus}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Side: Badge */}
+                  <div className="flex-shrink-0 flex flex-col items-start sm:items-end p-3 sm:px-4 sm:py-2 rounded-lg bg-white/[0.03] border border-white/5 z-10 self-start sm:self-auto w-full sm:w-auto">
+                    <span className="text-[8px] md:text-[9px] text-white/30 uppercase tracking-[0.2em] font-mono">
+                      {item.badgeLabel}
+                    </span>
+                    <div className="flex items-baseline gap-1 mt-1">
+                      <span className="text-white text-base md:text-lg font-medium">{item.badgeValue}</span>
+                      {item.badgeMax && (
+                        <span className="text-white/20 text-[10px] md:text-xs">{item.badgeMax}</span>
+                      )}
+                    </div>
+                  </div>
+                  
+                </div>
+
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Highlight Bar */}
+          <div className="edu-highlights w-full mt-12 p-6 md:p-8 rounded-2xl border border-white/[0.05] bg-black/40 backdrop-blur-md grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 opacity-0 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent" />
+            
+            <div className="flex flex-col gap-3 relative z-10">
+              <GraduationCap className="w-5 h-5 text-white/50" strokeWidth={1.5} />
+              <div className="flex flex-col gap-1">
+                <span className="text-white text-sm font-medium">3.69 CGPA</span>
+                <span className="text-white/40 text-xs font-light leading-relaxed">Consistent academic performance.</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 relative z-10">
+              <Medal className="w-5 h-5 text-white/50" strokeWidth={1.5} />
+              <div className="flex flex-col gap-1">
+                <span className="text-white text-sm font-medium">Strong Foundation</span>
+                <span className="text-white/40 text-xs font-light leading-relaxed">Built strong fundamentals in science & technology.</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 relative z-10">
+              <Target className="w-5 h-5 text-white/50" strokeWidth={1.5} />
+              <div className="flex flex-col gap-1">
+                <span className="text-white text-sm font-medium">Focused Growth</span>
+                <span className="text-white/40 text-xs font-light leading-relaxed">Continuously learning, continuously evolving.</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 relative z-10">
+              <Sparkles className="w-5 h-5 text-white/50" strokeWidth={1.5} />
+              <div className="flex flex-col gap-1">
+                <span className="text-white text-sm font-medium">Future Driven</span>
+                <span className="text-white/40 text-xs font-light leading-relaxed">Preparing today for a meaningful impact.</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}

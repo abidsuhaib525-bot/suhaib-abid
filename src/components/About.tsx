@@ -1,0 +1,283 @@
+"use client";
+
+import { useRef, useEffect } from "react";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Code, ShieldCheck, PenTool } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export function About() {
+  const containerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    // Media query to reduce effect intensity on mobile
+    const isMobile = window.innerWidth < 768;
+    
+    // Softer minimum opacities for better readability outside focus zone
+    const mainStatementOpacity = isMobile ? 0.5 : 0.35;
+    const paragraphOpacity = isMobile ? 0.6 : 0.45;
+    const itemsOpacity = isMobile ? 0.55 : 0.4;
+    const quoteOpacity = isMobile ? 0.7 : 0.55;
+
+    const ctx = gsap.context(() => {
+      // 1. Initial Entry Reveal (Staggered Fade-Up)
+      gsap.fromTo(
+        ".about-reveal",
+        { y: 30, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 75%",
+          },
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          stagger: 0.15,
+          ease: "power2.out",
+        }
+      );
+      
+      // 2. Cinematic Parallax Transition from Hero
+      gsap.fromTo(
+        ".about-bg",
+        { y: "-3%", scale: 1.05 },
+        {
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+          y: "3%",
+          scale: 1.05,
+          ease: "none",
+        }
+      );
+
+      // 3. Heading Subtle Parallax (Stable anchor)
+      gsap.to(".parallax-heading", {
+        y: -40,
+        scrollTrigger: {
+          trigger: ".parallax-heading",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        }
+      });
+
+      // 4. Focus Zone: Main Statement
+      gsap.utils.toArray(".focus-main").forEach((el: any) => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%", // start brightening earlier
+            end: "bottom 15%", // fully dim later
+            scrub: true,
+          }
+        });
+        
+        // Strongest effect, but still perfectly readable
+        tl.fromTo(el, { opacity: mainStatementOpacity, color: "#8a8a8a" }, { opacity: 1, color: "#ffffff", duration: 1, ease: "power1.inOut" })
+          .to(el, { opacity: mainStatementOpacity, color: "#8a8a8a", duration: 1, ease: "power1.inOut" });
+      });
+
+      // 4b. Focus Zone: Paragraph
+      gsap.utils.toArray(".focus-paragraph").forEach((el: any) => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            end: "bottom 15%",
+            scrub: true,
+          }
+        });
+        
+        // Softer effect for paragraph to maintain reading comfort
+        tl.fromTo(el, { opacity: paragraphOpacity, color: "#a3a3a3" }, { opacity: 1, color: "#ffffff", duration: 1, ease: "power1.inOut" })
+          .to(el, { opacity: paragraphOpacity, color: "#a3a3a3", duration: 1, ease: "power1.inOut" });
+      });
+
+      // 5. Focus Zone: 3 Core Areas (Sequential Staggered Scrub)
+      const itemsTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".focus-items-container",
+          start: "top 85%",
+          end: "bottom 15%",
+          scrub: true,
+        }
+      });
+
+      // Stagger the brightening, then stagger the dimming
+      itemsTl.fromTo(".focus-item", 
+        { opacity: itemsOpacity }, 
+        { opacity: 1, duration: 1, stagger: 0.5, ease: "power1.inOut" }
+      ).to(".focus-item", 
+        { opacity: itemsOpacity, duration: 1, stagger: 0.5, ease: "power1.inOut" }, 
+        "-=1" // overlap the dimming so they chain nicely
+      );
+
+      // 6. Focus Zone: Quote Card (Very Subtle)
+      gsap.utils.toArray(".focus-subtle").forEach((el: any) => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: el,
+            start: "top 90%",
+            end: "bottom 10%",
+            scrub: true,
+          }
+        });
+        
+        tl.fromTo(el, 
+          { opacity: quoteOpacity, borderColor: "rgba(255,255,255,0.04)" }, 
+          { opacity: 1, borderColor: "rgba(255,255,255,0.2)", duration: 1, ease: "power1.inOut" }
+        ).to(el, 
+          { opacity: quoteOpacity, borderColor: "rgba(255,255,255,0.04)", duration: 1, ease: "power1.inOut" }
+        );
+      });
+
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section 
+      id="about" 
+      ref={containerRef} 
+      className="relative w-full min-h-screen bg-[#030303] flex items-center overflow-hidden"
+    >
+      {/* Cinematic Background Layer (Animated by GSAP) */}
+      <div className="absolute inset-0 z-0 about-bg">
+        
+        {/* Desktop Background Layer */}
+        <div className="hidden md:block absolute inset-0">
+          <Image 
+            src="/about.png" 
+            alt="Cinematic Space Environment" 
+            fill 
+            priority
+            className="object-cover object-[80%_center] 2xl:object-[90%_center] opacity-80"
+          />
+        </div>
+
+        {/* Mobile-Specific Background Layer (Art-Directed for 9:16) */}
+        {/* Image moved to the TOP for mobile view as requested */}
+        <div className="md:hidden absolute top-0 right-0 w-[140vw] h-[140vw] opacity-90">
+          <Image 
+            src="/about.png" 
+            alt="Cinematic Space Environment Mobile" 
+            fill 
+            priority
+            className="object-contain object-right-top"
+          />
+        </div>
+
+        {/* Common Gradients (Made slightly softer on mobile bottom so image shows through) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303] opacity-70 md:opacity-100" />
+      </div>
+
+      {/* Main Content Container */}
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-24 w-full h-full relative z-10 flex flex-col justify-center py-32">
+        
+        {/* Vertical Editorial Indicator */}
+        <div className="hidden md:flex absolute left-6 lg:left-12 top-0 bottom-0 flex-col justify-between items-center py-20 opacity-30 pointer-events-none">
+          <span className="text-[9px] tracking-[0.4em] font-mono text-white whitespace-nowrap rotate-[-90deg] origin-center">
+            SEC 02 / ABOUT
+          </span>
+          <div className="w-[1px] h-32 bg-white/20"></div>
+          <span className="text-[9px] tracking-[0.4em] font-mono text-white whitespace-nowrap rotate-[-90deg] origin-center">
+            SCROLL TO EXPLORE
+          </span>
+          <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center mt-8">
+            <span className="text-white/60 text-[10px]">Z</span>
+          </div>
+        </div>
+
+        {/* Content Wrapper */}
+        <div className="w-full md:w-[65%] lg:w-[55%] flex flex-col gap-12 md:ml-16 lg:ml-20">
+          
+          {/* Typography Header */}
+          <div className="flex flex-col gap-4 parallax-heading">
+            <div className="about-reveal flex items-center gap-4 opacity-0">
+              <span className="text-white/40 text-[9px] font-mono tracking-[0.4em] uppercase">
+                // ABOUT ME
+              </span>
+            </div>
+            
+            <h2 className="about-reveal font-sans text-[80px] md:text-[100px] lg:text-[120px] font-bold tracking-tighter leading-[0.8] flex flex-col opacity-0">
+              <span className="text-white drop-shadow-lg">ABOUT</span>
+              <span className="text-white/10 drop-shadow-sm">ME</span>
+            </h2>
+          </div>
+
+          <div className="about-reveal w-8 h-[1px] bg-white/10 opacity-0" />
+
+          {/* Sub-Header & Paragraph */}
+          <div className="flex flex-col gap-6 max-w-[480px]">
+            <div className="about-reveal flex items-center gap-4 opacity-0">
+              <span className="text-white/40 text-[9px] font-mono tracking-[0.4em] uppercase">
+                WHO I AM
+              </span>
+            </div>
+            
+            <div className="about-reveal opacity-0">
+              <h3 className="focus-main text-2xl md:text-[28px] font-medium leading-[1.3] tracking-tight">
+                I build intelligent applications and utilities that are fast, intuitive, and meaningful.
+              </h3>
+            </div>
+            
+            <div className="about-reveal opacity-0">
+              <p className="focus-paragraph text-sm leading-[1.8] font-light">
+                I'm a software engineer and AI student currently pursuing my BS at NUML, Faisalabad. I specialize in building high-performance desktop utilities, automation tools, and modern web applications. My focus is on writing clean logic and crafting interfaces that solve real-world problems efficiently.
+              </p>
+            </div>
+          </div>
+
+          {/* Bottom Grid Features & Quote */}
+          <div className="about-reveal focus-items-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 mt-12 opacity-0">
+            
+            {/* Feature 1 */}
+            <div className="focus-item flex flex-col gap-4">
+              <Code className="w-5 h-5 text-white" strokeWidth={1.5} />
+              <h4 className="text-[10px] text-white uppercase tracking-[0.2em] font-medium">Engineering</h4>
+              <p className="text-white text-xs font-light leading-relaxed">
+                Build fast, scalable desktop and web applications.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="focus-item flex flex-col gap-4">
+              <ShieldCheck className="w-5 h-5 text-white" strokeWidth={1.5} />
+              <h4 className="text-[10px] text-white uppercase tracking-[0.2em] font-medium">Artificial Intel</h4>
+              <p className="text-white text-xs font-light leading-relaxed">
+                Explore machine learning and intelligent automation.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="focus-item flex flex-col gap-4">
+              <PenTool className="w-5 h-5 text-white" strokeWidth={1.5} />
+              <h4 className="text-[10px] text-white uppercase tracking-[0.2em] font-medium">UI / UX Design</h4>
+              <p className="text-white text-xs font-light leading-relaxed">
+                Create clean interfaces where usability and visual identity meet.
+              </p>
+            </div>
+
+            {/* Quote Card */}
+            <div className="focus-subtle flex flex-col justify-center gap-3 p-5 border border-white/[0.05] bg-black/20 rounded-sm">
+              <span className="text-white/20 font-serif text-3xl leading-none">"</span>
+              <p className="text-white/50 text-xs leading-relaxed font-light font-sans -mt-2">
+                Code is not just logic, it's creativity with <span className="text-white/80 font-medium">purpose</span>.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
