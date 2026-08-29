@@ -225,7 +225,7 @@ export function Skills() {
           </div>
 
           {/* Cards Grid */}
-          <div className="skills-grid grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8 lg:gap-12 mt-6">
+          <div className="skills-grid grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8 lg:gap-12 mt-12">
             {skillCategories.map((category, index) => (
               <div 
                 key={index}
@@ -233,33 +233,36 @@ export function Skills() {
                   cardsRef.current[index] = el;
                 }}
                 onMouseMove={(e) => handleCardMouseMove(e, index)}
-                // We use drop-shadow on the parent to create a border that perfectly traces the custom clip-path
-                className="skill-card filter drop-shadow-[0_0_1px_rgba(255,255,255,0.3)] hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.6)] transition-all duration-500 opacity-0 group cursor-default h-full"
+                className="skill-card relative w-full pt-6 opacity-0 group cursor-default"
               >
-                {/* The Custom Sci-Fi Polygon Card */}
-                <div 
-                  className="relative flex flex-col items-center p-8 md:p-10 pt-16 bg-[#030303]/60 backdrop-blur-xl h-full"
-                  style={{ 
-                    clipPath: "polygon(0% 40px, 15px 25px, calc(50% - 50px) 25px, calc(50% - 30px) 0%, calc(50% + 30px) 0%, calc(50% + 50px) 25px, calc(100% - 15px) 25px, 100% 40px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0% calc(100% - 15px))" 
-                  }}
-                >
+                {/* Hexagon & Icon overlapping the top edge */}
+                <div className="absolute top-[0px] left-1/2 -translate-x-1/2 z-20 group-hover:-translate-y-1 transition-transform duration-500">
+                  <div className="relative w-14 h-14 flex items-center justify-center">
+                    {/* Glowing Hexagon Border */}
+                    <Hexagon className="absolute inset-0 w-full h-full text-white/30 group-hover:text-white/70 transition-colors duration-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]" strokeWidth={1} />
+                    
+                    {/* Solid background mask to hide the straight card border behind the hexagon */}
+                    <div className="absolute inset-1 bg-[#030303] rounded-full z-[-1] shadow-[0_0_15px_#030303]"></div>
+                    
+                    {/* Main Icon */}
+                    <category.icon className="w-5 h-5 text-white/80 group-hover:text-white transition-colors duration-500 z-10" strokeWidth={1.5} />
+                  </div>
+                </div>
+
+                {/* Main Glass Card */}
+                <div className="relative w-full h-full rounded-3xl bg-white/[0.02] backdrop-blur-[4px] border border-white/[0.06] group-hover:border-white/[0.15] group-hover:bg-white/[0.04] transition-all duration-500 flex flex-col items-center p-8 md:p-10 pt-14 overflow-hidden">
+                  
                   {/* Dynamic Mouse Glow Overlay */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                        style={{
-                         background: "radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.1), transparent 40%)"
+                         background: "radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.05), transparent 40%)"
                        }}
                   />
-                  
-                  {/* Hexagon & Icon perfectly positioned inside the raised top section */}
-                  <div className="absolute top-[3px] left-1/2 -translate-x-1/2 flex items-center justify-center group-hover:-translate-y-0.5 transition-transform duration-500">
-                    <Hexagon className="absolute inset-0 w-10 h-10 -ml-2.5 -mt-2.5 text-white/20 group-hover:text-white/50 transition-colors duration-500" strokeWidth={1} />
-                    <category.icon className="w-5 h-5 text-white/80 group-hover:text-white transition-colors duration-500 z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" strokeWidth={1.5} />
-                  </div>
 
                   {/* Inner Content */}
-                  <div className="flex flex-col items-center text-center w-full mt-4 relative z-10 flex-grow">
+                  <div className="flex flex-col items-center text-center w-full mt-2 relative z-10 flex-grow">
                     
-                    <h3 className="text-white text-[11px] md:text-xs font-mono tracking-[0.3em] uppercase mb-4 group-hover:text-white transition-colors duration-300">
+                    <h3 className="text-white text-[11px] md:text-xs font-mono tracking-[0.3em] uppercase mb-4 transition-colors duration-300">
                       {category.title}
                     </h3>
                     
@@ -294,7 +297,7 @@ export function Skills() {
           </div>
 
           {/* Bottom Panel (Core Strengths) */}
-          <div className="strengths-panel w-full mt-12 p-8 md:p-10 rounded-2xl border border-white/[0.08] bg-[#030303]/40 backdrop-blur-md flex flex-col lg:flex-row gap-12 opacity-0 overflow-hidden relative group hover:border-white/15 transition-colors duration-500">
+          <div className="strengths-panel w-full mt-16 p-8 md:p-12 rounded-3xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-md flex flex-col lg:flex-row gap-12 opacity-0 overflow-hidden relative group hover:border-white/[0.15] transition-colors duration-500">
             <div className="absolute inset-0 bg-gradient-to-r from-white/[0.02] to-transparent pointer-events-none" />
             
             {/* Left: Quote */}
@@ -314,14 +317,23 @@ export function Skills() {
             </div>
 
             {/* Right: Strengths Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:w-[65%] relative z-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-y-10 gap-x-6 lg:w-[65%] relative z-10">
               {coreStrengths.map((item, index) => (
-                <div key={index} className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3">
-                    <item.icon className="w-4 h-4 text-white/70" strokeWidth={1.5} />
-                    <span className="text-white text-[11px] font-medium tracking-[0.1em]">{item.title}</span>
+                <div 
+                  key={index} 
+                  className={`flex flex-col items-center text-center gap-4 px-2 xl:px-4 ${
+                    index !== 0 ? 'xl:border-l xl:border-white/10' : ''
+                  }`}
+                >
+                  {/* Icon and Title */}
+                  <div className="flex flex-col sm:flex-row xl:flex-col 2xl:flex-row items-center gap-3">
+                    <item.icon className="w-8 h-8 text-white/80 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] shrink-0" strokeWidth={1.2} />
+                    <span className="text-white text-[13px] font-medium tracking-[0.05em] leading-tight">
+                      {item.title}
+                    </span>
                   </div>
-                  <p className="text-white/40 text-xs leading-relaxed font-light">
+                  {/* Description */}
+                  <p className="text-white/40 text-[11px] md:text-xs leading-relaxed font-light max-w-[200px]">
                     {item.desc}
                   </p>
                 </div>
