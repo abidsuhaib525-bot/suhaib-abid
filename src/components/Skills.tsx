@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, MouseEvent as ReactMouseEvent } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -40,15 +40,14 @@ export function Skills() {
   const containerRef = useRef<HTMLElement>(null);
   const bgImageRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // 1. Cinematic Background Scroll Parallax
+      // 1. Cinematic Background Scroll Parallax (Extremely slow and subtle)
       gsap.fromTo(
         bgImageRef.current,
-        { y: "-5%", scale: 1.05 },
+        { y: "-3%", scale: 1.02 },
         {
           scrollTrigger: {
             trigger: containerRef.current,
@@ -56,8 +55,24 @@ export function Skills() {
             end: "bottom top",
             scrub: true,
           },
-          y: "5%",
-          scale: 1.05,
+          y: "3%",
+          scale: 1.02,
+          ease: "none",
+        }
+      );
+
+      gsap.fromTo(
+        particlesRef.current,
+        { y: "-6%", opacity: 0.1 },
+        {
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+          y: "6%",
+          opacity: 0.3,
           ease: "none",
         }
       );
@@ -79,27 +94,37 @@ export function Skills() {
         }
       );
 
-      // 3. Cards Reveal
-      gsap.fromTo(
-        cardsRef.current,
-        { y: 50, opacity: 0 },
-        {
+      // 3. Cards Reveal with Tag Stagger
+      const cards = gsap.utils.toArray(".skill-card");
+      cards.forEach((card: any, index) => {
+        const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: ".skills-grid",
-            start: "top 80%",
-          },
-          y: 0,
-          opacity: 1,
-          duration: 1.2,
-          stagger: 0.2,
-          ease: "power3.out",
-        }
-      );
+            trigger: card,
+            start: "top 85%",
+          }
+        });
+
+        // Reveal the card itself
+        tl.fromTo(
+          card,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
+        );
+
+        // Subtly reveal the tags inside the card
+        const tags = card.querySelectorAll(".skill-tag");
+        tl.fromTo(
+          tags,
+          { y: 10, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: "power2.out" },
+          "-=0.5" // Start slightly before card finishes revealing
+        );
+      });
 
       // 4. Bottom Panel Reveal
       gsap.fromTo(
         ".strengths-panel",
-        { y: 40, opacity: 0 },
+        { y: 30, opacity: 0 },
         {
           scrollTrigger: {
             trigger: ".strengths-panel",
@@ -112,38 +137,28 @@ export function Skills() {
         }
       );
 
+      // 5. Core Strengths Item Reveal
+      gsap.fromTo(
+        ".strength-item",
+        { y: 20, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: ".strengths-panel",
+            start: "top 85%",
+          },
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          stagger: 0.1,
+          ease: "power2.out",
+          delay: 0.2
+        }
+      );
+
     }, containerRef);
 
-    // Mouse Parallax Effect for Background (Similar to Hero)
-    const handleWindowMouseMove = (e: MouseEvent) => {
-      if (window.innerWidth < 768) return;
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      
-      gsap.to(bgImageRef.current, { x: x * -15, y: y * -15, duration: 2.5, ease: "power2.out" });
-      gsap.to(particlesRef.current, { x: x * -30, y: y * -30, duration: 2.5, ease: "power2.out" });
-    };
-
-    window.addEventListener("mousemove", handleWindowMouseMove);
-
-    return () => {
-      window.removeEventListener("mousemove", handleWindowMouseMove);
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
-
-  // Mouse tracking for the premium card glass glow effect
-  const handleCardMouseMove = (e: ReactMouseEvent<HTMLDivElement>, index: number) => {
-    const card = cardsRef.current[index];
-    if (!card) return;
-
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    card.style.setProperty("--mouse-x", `${x}px`);
-    card.style.setProperty("--mouse-y", `${y}px`);
-  };
 
   return (
     <section 
@@ -177,11 +192,11 @@ export function Skills() {
         </div>
 
         {/* Subtle Atmospheric Dust / Particles */}
-        <div ref={particlesRef} className="absolute inset-[-10%] w-[120%] h-[120%] z-0 opacity-30 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent bg-[length:40px_40px] pointer-events-none" />
+        <div ref={particlesRef} className="absolute inset-[-10%] w-[120%] h-[120%] z-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.05] via-transparent to-transparent bg-[length:50px_50px] pointer-events-none" />
 
         {/* Common Gradients for transitions and text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/60 to-transparent w-full pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303] opacity-80 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/70 to-transparent w-full pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303] opacity-90 pointer-events-none" />
       </div>
 
       {/* Main Content Container */}
@@ -198,7 +213,7 @@ export function Skills() {
           </span>
         </div>
 
-        <div className="w-full lg:ml-20 flex flex-col gap-24">
+        <div className="w-full lg:ml-20 flex flex-col gap-20 md:gap-24">
           
           {/* Header */}
           <div className="flex flex-col gap-5 max-w-xl">
@@ -214,10 +229,10 @@ export function Skills() {
                 <Circle className="w-4 h-4 md:w-6 md:h-6 text-white/20 mt-2 md:mt-4 ml-3" strokeWidth={1.5} />
               </h2>
               {/* Subtle Glowing Line under Title */}
-              <div className="w-24 h-[1px] bg-gradient-to-r from-white via-white/50 to-transparent shadow-[0_0_10px_rgba(255,255,255,0.8)] mt-4"></div>
+              <div className="w-24 h-[1px] bg-gradient-to-r from-white via-white/40 to-transparent shadow-[0_0_8px_rgba(255,255,255,0.4)] mt-4"></div>
             </div>
             
-            <p className="skills-reveal text-white/60 text-sm md:text-base leading-relaxed font-light mt-4 opacity-0">
+            <p className="skills-reveal text-white/50 text-sm md:text-base leading-relaxed font-light mt-4 opacity-0">
               A blend of technical expertise, <br className="hidden sm:block" />
               creative thinking, and continuous learning <br className="hidden sm:block" />
               that powers everything I build.
@@ -225,69 +240,55 @@ export function Skills() {
           </div>
 
           {/* Cards Grid */}
-          <div className="skills-grid grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8 lg:gap-12 mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-12 mt-4">
             {skillCategories.map((category, index) => (
               <div 
                 key={index}
-                ref={(el) => {
-                  cardsRef.current[index] = el;
-                }}
-                onMouseMove={(e) => handleCardMouseMove(e, index)}
-                className="skill-card relative w-full pt-6 opacity-0 group cursor-default"
+                className="skill-card relative w-full pt-8 group cursor-default opacity-0"
               >
                 {/* Hexagon & Icon overlapping the top edge */}
-                <div className="absolute top-[0px] left-1/2 -translate-x-1/2 z-20 group-hover:-translate-y-1 transition-transform duration-500">
+                <div className="absolute top-[4px] left-1/2 -translate-x-1/2 z-20 group-hover:-translate-y-1.5 transition-transform duration-700 ease-out">
                   <div className="relative w-14 h-14 flex items-center justify-center">
-                    {/* Glowing Hexagon Border */}
-                    <Hexagon className="absolute inset-0 w-full h-full text-white/30 group-hover:text-white/70 transition-colors duration-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]" strokeWidth={1} />
+                    {/* Subtle Hexagon Border */}
+                    <Hexagon className="absolute inset-0 w-full h-full text-white/20 group-hover:text-white/40 transition-colors duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.05)]" strokeWidth={1} />
                     
-                    {/* Solid background mask to hide the straight card border behind the hexagon */}
-                    <div className="absolute inset-1 bg-[#030303] rounded-full z-[-1] shadow-[0_0_15px_#030303]"></div>
+                    {/* Solid background mask to perfectly hide the straight card border behind the hexagon */}
+                    <div className="absolute inset-1 bg-[#030303] rounded-full z-[-1] shadow-[0_0_10px_#030303]"></div>
                     
-                    {/* Main Icon */}
-                    <category.icon className="w-5 h-5 text-white/80 group-hover:text-white transition-colors duration-500 z-10" strokeWidth={1.5} />
+                    {/* Main Icon (Reacts on hover) */}
+                    <category.icon className="w-5 h-5 text-white/70 group-hover:text-white group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 z-10" strokeWidth={1.5} />
                   </div>
                 </div>
 
-                {/* Main Glass Card */}
-                <div className="relative w-full h-full rounded-3xl bg-white/[0.02] backdrop-blur-[4px] border border-white/[0.06] group-hover:border-white/[0.15] group-hover:bg-white/[0.04] transition-all duration-500 flex flex-col items-center p-8 md:p-10 pt-14 overflow-hidden">
+                {/* Main Glass Card (Obsidian Effect) */}
+                <div className="relative w-full h-full rounded-3xl bg-white/[0.01] backdrop-blur-[6px] border border-white/[0.04] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] group-hover:-translate-y-1 group-hover:border-white/[0.1] group-hover:bg-white/[0.03] group-hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)] transition-all duration-700 ease-out flex flex-col items-center p-8 md:p-10 pt-14 overflow-hidden">
                   
-                  {/* Dynamic Mouse Glow Overlay */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                       style={{
-                         background: "radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.05), transparent 40%)"
-                       }}
-                  />
+                  {/* Subtle Background Glow on Hover (No mouse tracking) */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/[0.03] to-transparent" />
 
                   {/* Inner Content */}
                   <div className="flex flex-col items-center text-center w-full mt-2 relative z-10 flex-grow">
                     
-                    <h3 className="text-white text-[11px] md:text-xs font-mono tracking-[0.3em] uppercase mb-4 transition-colors duration-300">
+                    <h3 className="text-white text-[11px] md:text-xs font-mono tracking-[0.3em] uppercase mb-4 transition-colors duration-500">
                       {category.title}
                     </h3>
                     
-                    <div className="w-8 h-[1px] bg-white/10 mb-6 group-hover:bg-white/30 transition-colors duration-300"></div>
+                    <div className="w-6 h-[1px] bg-white/10 mb-6 group-hover:bg-white/30 group-hover:w-10 transition-all duration-500"></div>
                     
-                    <p className="text-white/40 text-xs leading-relaxed font-light mb-10 h-[60px] max-w-[220px]">
+                    <p className="text-white/40 text-xs md:text-[13px] leading-relaxed font-light mb-12 max-w-[220px]">
                       {category.description}
                     </p>
                     
                     {/* Skills Pill Grid */}
-                    <div className="flex flex-wrap justify-center gap-2 mb-10">
+                    <div className="flex flex-wrap justify-center gap-2.5 mt-auto">
                       {category.skills.map((skill, sIndex) => (
                         <span 
                           key={sIndex} 
-                          className="px-3 py-1.5 rounded-md bg-white/[0.02] border border-white/[0.05] text-[10px] text-white/50 tracking-wider transition-all duration-300 group-hover:border-white/15 group-hover:bg-white/[0.05] group-hover:text-white/80"
+                          className="skill-tag px-3 py-1.5 rounded-md bg-white/[0.015] border border-white/[0.04] text-[10px] text-white/40 tracking-wider transition-all duration-300 hover:bg-white/[0.06] hover:border-white/[0.15] hover:text-white/90 hover:shadow-[0_0_10px_rgba(255,255,255,0.05)] cursor-default"
                         >
                           {skill}
                         </span>
                       ))}
-                    </div>
-
-                    {/* Explore Link */}
-                    <div className="mt-auto flex items-center gap-3 opacity-40 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-                      <span className="text-[9px] uppercase tracking-[0.3em] font-mono text-white">Explore</span>
-                      <span className="text-white text-xs group-hover:translate-x-1 transition-transform duration-300">→</span>
                     </div>
                     
                   </div>
@@ -297,21 +298,21 @@ export function Skills() {
           </div>
 
           {/* Bottom Panel (Core Strengths) */}
-          <div className="strengths-panel w-full mt-16 p-8 md:p-12 rounded-3xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-md flex flex-col lg:flex-row gap-12 opacity-0 overflow-hidden relative group hover:border-white/[0.15] transition-colors duration-500">
-            <div className="absolute inset-0 bg-gradient-to-r from-white/[0.02] to-transparent pointer-events-none" />
+          <div className="strengths-panel w-full mt-8 p-8 md:p-12 rounded-3xl border border-white/[0.04] bg-white/[0.01] backdrop-blur-md flex flex-col lg:flex-row gap-12 opacity-0 overflow-hidden relative group hover:border-white/[0.08] hover:bg-white/[0.02] transition-all duration-700 ease-out">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/[0.01] to-transparent pointer-events-none" />
             
             {/* Left: Quote */}
-            <div className="flex flex-col gap-6 lg:w-[35%] relative z-10 border-b lg:border-b-0 lg:border-r border-white/10 pb-8 lg:pb-0 lg:pr-8">
+            <div className="flex flex-col gap-6 lg:w-[35%] relative z-10 border-b lg:border-b-0 lg:border-r border-white/[0.05] pb-8 lg:pb-0 lg:pr-8">
               <span className="text-white/30 text-[9px] font-mono tracking-[0.4em] uppercase">
                 // CORE STRENGTHS
               </span>
               <div className="relative">
                 <span className="absolute -top-6 -left-4 text-white/10 font-serif text-6xl leading-none">"</span>
-                <p className="text-white/90 text-lg md:text-xl font-medium leading-[1.4] tracking-tight">
+                <p className="text-white/80 text-lg md:text-xl font-medium leading-[1.4] tracking-tight group-hover:text-white transition-colors duration-700">
                   Skills are the tools, <br/> creativity is the weapon.
                 </p>
               </div>
-              <div className="mt-2 text-white/40 font-serif italic text-3xl tracking-tight -rotate-3 opacity-80 group-hover:text-white/60 transition-colors duration-500">
+              <div className="mt-2 text-white/30 font-serif italic text-3xl tracking-tight -rotate-3 opacity-80 transition-colors duration-700">
                 Suhaib Abid
               </div>
             </div>
@@ -321,14 +322,14 @@ export function Skills() {
               {coreStrengths.map((item, index) => (
                 <div 
                   key={index} 
-                  className={`flex flex-col items-center text-center gap-4 px-2 xl:px-4 ${
-                    index !== 0 ? 'xl:border-l xl:border-white/10' : ''
+                  className={`strength-item flex flex-col items-center text-center gap-4 px-2 xl:px-4 ${
+                    index !== 0 ? 'xl:border-l xl:border-white/[0.05]' : ''
                   }`}
                 >
                   {/* Icon and Title */}
                   <div className="flex flex-col sm:flex-row xl:flex-col 2xl:flex-row items-center gap-3">
-                    <item.icon className="w-8 h-8 text-white/80 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] shrink-0" strokeWidth={1.2} />
-                    <span className="text-white text-[13px] font-medium tracking-[0.05em] leading-tight">
+                    <item.icon className="w-7 h-7 text-white/60 group-hover:text-white/90 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)] shrink-0 transition-colors duration-700" strokeWidth={1.2} />
+                    <span className="text-white/90 text-[13px] font-medium tracking-[0.05em] leading-tight">
                       {item.title}
                     </span>
                   </div>
