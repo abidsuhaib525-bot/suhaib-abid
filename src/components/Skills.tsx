@@ -225,7 +225,7 @@ export function Skills() {
           </div>
 
           {/* Cards Grid */}
-          <div className="skills-grid grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-12 mt-6">
+          <div className="skills-grid grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8 lg:gap-12 mt-6">
             {skillCategories.map((category, index) => (
               <div 
                 key={index}
@@ -233,69 +233,61 @@ export function Skills() {
                   cardsRef.current[index] = el;
                 }}
                 onMouseMove={(e) => handleCardMouseMove(e, index)}
-                className="skill-card relative flex flex-col items-center p-8 md:p-10 rounded-2xl bg-[#030303]/40 backdrop-blur-md border border-white/[0.08] opacity-0 group transition-colors duration-500 hover:border-white/20 hover:bg-[#030303]/60 overflow-hidden"
+                // We use drop-shadow on the parent to create a border that perfectly traces the custom clip-path
+                className="skill-card filter drop-shadow-[0_0_1px_rgba(255,255,255,0.3)] hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.6)] transition-all duration-500 opacity-0 group cursor-default h-full"
               >
-                {/* Dynamic Mouse Glow Overlay */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                     style={{
-                       background: "radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.08), transparent 40%)"
-                     }}
-                />
-
-                {/* Top Border Masking Trick for Sci-Fi Shape */}
-                {/* This dark background hides the straight top border of the card directly underneath the hexagon */}
-                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-20 h-4 bg-[#030303] z-0" />
-                
-                {/* Tech Joint Dots */}
-                <div className="absolute top-[-2px] left-[calc(50%-45px)] w-1 h-1 bg-white/30 rounded-full" />
-                <div className="absolute top-[-2px] right-[calc(50%-45px)] w-1 h-1 bg-white/30 rounded-full" />
-
-                {/* Hexagon Icon Overlapping Top Border */}
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2 z-10 group-hover:-translate-y-1 transition-transform duration-500">
-                  <div className="relative w-14 h-14 flex items-center justify-center">
-                    {/* The glowing hexagon border */}
-                    <Hexagon className="absolute inset-0 w-full h-full text-white/20 group-hover:text-white/50 transition-colors duration-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" strokeWidth={1} />
-                    {/* Solid background inside hexagon to hide card border */}
-                    <div className="absolute inset-1 bg-[#030303] rounded-full z-[-1]" style={{ clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)" }}></div>
-                    {/* The icon */}
+                {/* The Custom Sci-Fi Polygon Card */}
+                <div 
+                  className="relative flex flex-col items-center p-8 md:p-10 pt-16 bg-[#030303]/60 backdrop-blur-xl h-full"
+                  style={{ 
+                    clipPath: "polygon(0% 40px, 15px 25px, calc(50% - 50px) 25px, calc(50% - 30px) 0%, calc(50% + 30px) 0%, calc(50% + 50px) 25px, calc(100% - 15px) 25px, 100% 40px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0% calc(100% - 15px))" 
+                  }}
+                >
+                  {/* Dynamic Mouse Glow Overlay */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                       style={{
+                         background: "radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.1), transparent 40%)"
+                       }}
+                  />
+                  
+                  {/* Hexagon & Icon perfectly positioned inside the raised top section */}
+                  <div className="absolute top-[3px] left-1/2 -translate-x-1/2 flex items-center justify-center group-hover:-translate-y-0.5 transition-transform duration-500">
+                    <Hexagon className="absolute inset-0 w-10 h-10 -ml-2.5 -mt-2.5 text-white/20 group-hover:text-white/50 transition-colors duration-500" strokeWidth={1} />
                     <category.icon className="w-5 h-5 text-white/80 group-hover:text-white transition-colors duration-500 z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" strokeWidth={1.5} />
                   </div>
-                </div>
 
-                {/* Left Border Glowing Dot */}
-                <div className="absolute top-1/2 -translate-y-1/2 -left-[5px] w-[9px] h-[9px] rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.9)] border-2 border-[#030303]" />
+                  {/* Inner Content */}
+                  <div className="flex flex-col items-center text-center w-full mt-4 relative z-10 flex-grow">
+                    
+                    <h3 className="text-white text-[11px] md:text-xs font-mono tracking-[0.3em] uppercase mb-4 group-hover:text-white transition-colors duration-300">
+                      {category.title}
+                    </h3>
+                    
+                    <div className="w-8 h-[1px] bg-white/10 mb-6 group-hover:bg-white/30 transition-colors duration-300"></div>
+                    
+                    <p className="text-white/40 text-xs leading-relaxed font-light mb-10 h-[60px] max-w-[220px]">
+                      {category.description}
+                    </p>
+                    
+                    {/* Skills Pill Grid */}
+                    <div className="flex flex-wrap justify-center gap-2 mb-10">
+                      {category.skills.map((skill, sIndex) => (
+                        <span 
+                          key={sIndex} 
+                          className="px-3 py-1.5 rounded-md bg-white/[0.02] border border-white/[0.05] text-[10px] text-white/50 tracking-wider transition-all duration-300 group-hover:border-white/15 group-hover:bg-white/[0.05] group-hover:text-white/80"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
 
-                {/* Inner Content */}
-                <div className="flex flex-col items-center text-center w-full mt-6 relative z-10">
-                  
-                  <h3 className="text-white text-[11px] md:text-xs font-mono tracking-[0.3em] uppercase mb-4">
-                    {category.title}
-                  </h3>
-                  
-                  <div className="w-8 h-[1px] bg-white/10 mb-6"></div>
-                  
-                  <p className="text-white/40 text-xs leading-relaxed font-light mb-10 h-[60px] max-w-[220px]">
-                    {category.description}
-                  </p>
-                  
-                  {/* Skills Pill Grid */}
-                  <div className="flex flex-wrap justify-center gap-2 mb-10">
-                    {category.skills.map((skill, sIndex) => (
-                      <span 
-                        key={sIndex} 
-                        className="px-3 py-1.5 rounded-md bg-white/[0.02] border border-white/[0.05] text-[10px] text-white/50 tracking-wider transition-all duration-300 group-hover:border-white/15 group-hover:bg-white/[0.05] group-hover:text-white/80"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                    {/* Explore Link */}
+                    <div className="mt-auto flex items-center gap-3 opacity-40 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+                      <span className="text-[9px] uppercase tracking-[0.3em] font-mono text-white">Explore</span>
+                      <span className="text-white text-xs group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                    
                   </div>
-
-                  {/* Explore Link */}
-                  <div className="mt-auto flex items-center gap-3 opacity-40 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-                    <span className="text-[9px] uppercase tracking-[0.3em] font-mono text-white">Explore</span>
-                    <span className="text-white text-xs group-hover:translate-x-1 transition-transform duration-300">→</span>
-                  </div>
-                  
                 </div>
               </div>
             ))}
