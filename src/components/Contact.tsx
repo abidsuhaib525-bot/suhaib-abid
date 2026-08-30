@@ -201,7 +201,9 @@ export function Contact() {
               </div>
               <div className="flex flex-col gap-1.5 pt-0.5">
                 <span className="text-[9px] text-white/40 font-mono tracking-[0.2em] uppercase">Phone</span>
-                <span className="text-sm text-white/80">+92 349 7641385</span>
+                <a href="https://wa.me/923497641385" target="_blank" rel="noreferrer" className="text-sm text-white/80 hover:text-white transition-colors">
+                  +92 349 7641385
+                </a>
               </div>
             </div>
 
