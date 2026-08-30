@@ -201,7 +201,7 @@ export function Contact() {
               </div>
               <div className="flex flex-col gap-1.5 pt-0.5">
                 <span className="text-[9px] text-white/40 font-mono tracking-[0.2em] uppercase">Phone</span>
-                <a href="https://wa.me/923497641385" target="_blank" rel="noreferrer" className="text-sm text-white/80 hover:text-white transition-colors">
+                <a href="https://wa.me/923497641385?text=Hi%20Suhaib%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project." target="_blank" rel="noreferrer" className="text-sm text-white/80 hover:text-white transition-colors">
                   +92 349 7641385
                 </a>
               </div>
