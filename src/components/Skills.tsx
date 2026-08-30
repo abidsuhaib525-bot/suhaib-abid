@@ -44,7 +44,7 @@ export function Skills() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // 1. Cinematic Background Scroll Parallax (Extremely slow and subtle)
+      // 1. Cinematic Background Scroll Parallax
       gsap.fromTo(
         bgImageRef.current,
         { y: "-3%", scale: 1.02 },
@@ -104,20 +104,18 @@ export function Skills() {
           }
         });
 
-        // Reveal the card itself
         tl.fromTo(
           card,
           { y: 40, opacity: 0 },
           { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
         );
 
-        // Subtly reveal the tags inside the card
         const tags = card.querySelectorAll(".skill-tag");
         tl.fromTo(
           tags,
           { y: 10, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: "power2.out" },
-          "-=0.5" // Start slightly before card finishes revealing
+          "-=0.5"
         );
       });
 
@@ -167,7 +165,7 @@ export function Skills() {
       className="relative w-full min-h-screen bg-[#030303] flex items-center overflow-hidden py-32"
     >
       {/* Cinematic Background Layer */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 pointer-events-none">
         
         {/* Desktop Background with Parallax Ref */}
         <div ref={bgImageRef} className="hidden md:block absolute inset-[-5%] w-[110%] h-[110%]">
@@ -192,11 +190,11 @@ export function Skills() {
         </div>
 
         {/* Subtle Atmospheric Dust / Particles */}
-        <div ref={particlesRef} className="absolute inset-[-10%] w-[120%] h-[120%] z-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.05] via-transparent to-transparent bg-[length:50px_50px] pointer-events-none" />
+        <div ref={particlesRef} className="absolute inset-[-10%] w-[120%] h-[120%] z-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.05] via-transparent to-transparent bg-[length:50px_50px]" />
 
-        {/* Common Gradients for transitions and text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/70 to-transparent w-full pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303] opacity-90 pointer-events-none" />
+        {/* Common Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/70 to-transparent w-full" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303] opacity-90" />
       </div>
 
       {/* Main Content Container */}
@@ -247,33 +245,33 @@ export function Skills() {
                 className="skill-card relative w-full pt-8 group cursor-default opacity-0"
               >
                 {/* Hexagon & Icon overlapping the top edge */}
-                <div className="absolute top-[4px] left-1/2 -translate-x-1/2 z-20 group-hover:-translate-y-1.5 transition-transform duration-700 ease-out">
+                <div className="absolute top-[4px] left-1/2 -translate-x-1/2 z-20 group-hover:-translate-y-2 transition-transform duration-700 ease-out">
                   <div className="relative w-14 h-14 flex items-center justify-center">
                     {/* Subtle Hexagon Border */}
-                    <Hexagon className="absolute inset-0 w-full h-full text-white/20 group-hover:text-white/40 transition-colors duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.05)]" strokeWidth={1} />
+                    <Hexagon className="absolute inset-0 w-full h-full text-white/20 group-hover:text-white/50 transition-colors duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.05)]" strokeWidth={1} />
                     
-                    {/* Solid background mask to perfectly hide the straight card border behind the hexagon */}
+                    {/* Solid background mask */}
                     <div className="absolute inset-1 bg-[#030303] rounded-full z-[-1] shadow-[0_0_10px_#030303]"></div>
                     
                     {/* Main Icon (Reacts on hover) */}
-                    <category.icon className="w-5 h-5 text-white/70 group-hover:text-white group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 z-10" strokeWidth={1.5} />
+                    <category.icon className="w-5 h-5 text-white/70 group-hover:text-white group-hover:scale-110 group-hover:rotate-[5deg] transition-all duration-500 z-10" strokeWidth={1.5} />
                   </div>
                 </div>
 
                 {/* Main Glass Card (Obsidian Effect) */}
-                <div className="relative w-full h-full rounded-3xl bg-white/[0.01] backdrop-blur-[6px] border border-white/[0.04] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] group-hover:-translate-y-1 group-hover:border-white/[0.1] group-hover:bg-white/[0.03] group-hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)] transition-all duration-700 ease-out flex flex-col items-center p-8 md:p-10 pt-14 overflow-hidden">
+                <div className="relative w-full h-full rounded-3xl bg-white/[0.01] backdrop-blur-md border border-white/[0.04] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] group-hover:-translate-y-2 group-hover:border-white/[0.08] group-hover:bg-white/[0.02] transition-all duration-700 ease-out flex flex-col items-center p-8 md:p-10 pt-14 overflow-hidden">
                   
-                  {/* Subtle Background Glow on Hover (No mouse tracking) */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/[0.03] to-transparent" />
+                  {/* Subtle Background Glow on Hover */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.04] to-transparent" />
 
                   {/* Inner Content */}
                   <div className="flex flex-col items-center text-center w-full mt-2 relative z-10 flex-grow">
                     
-                    <h3 className="text-white text-[11px] md:text-xs font-mono tracking-[0.3em] uppercase mb-4 transition-colors duration-500">
+                    <h3 className="text-white text-[11px] md:text-xs font-mono tracking-[0.3em] uppercase mb-4 transition-transform duration-700 group-hover:translate-x-1">
                       {category.title}
                     </h3>
                     
-                    <div className="w-6 h-[1px] bg-white/10 mb-6 group-hover:bg-white/30 group-hover:w-10 transition-all duration-500"></div>
+                    <div className="w-6 h-[1px] bg-white/10 mb-6 group-hover:bg-white/40 group-hover:w-12 transition-all duration-700"></div>
                     
                     <p className="text-white/40 text-xs md:text-[13px] leading-relaxed font-light mb-12 max-w-[220px]">
                       {category.description}
@@ -284,7 +282,7 @@ export function Skills() {
                       {category.skills.map((skill, sIndex) => (
                         <span 
                           key={sIndex} 
-                          className="skill-tag px-3 py-1.5 rounded-md bg-white/[0.015] border border-white/[0.04] text-[10px] text-white/40 tracking-wider transition-all duration-300 hover:bg-white/[0.06] hover:border-white/[0.15] hover:text-white/90 hover:shadow-[0_0_10px_rgba(255,255,255,0.05)] cursor-default"
+                          className="skill-tag px-3 py-1.5 rounded-md bg-white/[0.015] border border-white/[0.04] text-[10px] text-white/40 tracking-wider transition-all duration-500 group-hover:text-white/70 group-hover:bg-white/[0.03] group-hover:border-white/[0.08]"
                         >
                           {skill}
                         </span>
@@ -326,6 +324,10 @@ export function Skills() {
                     index !== 0 ? 'xl:border-l xl:border-white/[0.05]' : ''
                   }`}
                 >
+                  <span className="text-white/20 font-mono text-[9px] tracking-widest w-full text-left sm:text-center xl:text-left pl-4 sm:pl-0 xl:pl-0 mb-[-10px]">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  
                   {/* Icon and Title */}
                   <div className="flex flex-col sm:flex-row xl:flex-col 2xl:flex-row items-center gap-3">
                     <item.icon className="w-7 h-7 text-white/60 group-hover:text-white/90 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)] shrink-0 transition-colors duration-700" strokeWidth={1.2} />
