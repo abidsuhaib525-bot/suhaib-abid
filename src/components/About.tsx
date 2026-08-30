@@ -251,7 +251,7 @@ export function About() {
             {/* Feature 2 */}
             <div className="focus-item flex flex-col gap-4">
               <ShieldCheck className="w-5 h-5 text-white" strokeWidth={1.5} />
-              <h4 className="text-[10px] text-white uppercase tracking-[0.2em] font-medium">Artificial Intel</h4>
+              <h4 className="text-[10px] text-white uppercase tracking-[0.2em] font-medium">Artificial Intelligence</h4>
               <p className="text-white text-xs font-light leading-relaxed">
                 Explore machine learning and intelligent automation.
               </p>
