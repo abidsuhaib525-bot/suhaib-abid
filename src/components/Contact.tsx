@@ -201,7 +201,7 @@ export function Contact() {
               </div>
               <div className="flex flex-col gap-1.5 pt-0.5">
                 <span className="text-[9px] text-white/40 font-mono tracking-[0.2em] uppercase">Phone</span>
-                <span className="text-sm text-white/80">+92 316 5181745</span>
+                <span className="text-sm text-white/80">+92 349 7641385</span>
               </div>
             </div>
 
