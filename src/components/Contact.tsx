@@ -261,13 +261,29 @@ export function Contact() {
             </div>
 
             {/* Form */}
-            <form ref={formRef} className="flex flex-col gap-5">
+            <form 
+              ref={formRef} 
+              className="flex flex-col gap-5"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const name = formData.get('name');
+                const email = formData.get('email');
+                const subject = formData.get('subject');
+                const message = formData.get('message');
+                
+                const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0AMessage:%0D%0A${message}`;
+                window.location.href = `mailto:abidsuhaib525@gmail.com?subject=${encodeURIComponent(subject as string)}&body=${body}`;
+              }}
+            >
               
               <div className="flex flex-col md:flex-row gap-5">
                 <div className="form-element flex-1 flex flex-col gap-2">
                   <label className="text-[9px] text-white/40 font-mono tracking-widest uppercase ml-1">YOUR NAME</label>
                   <input 
                     type="text" 
+                    name="name"
+                    required
                     placeholder="Your full name"
                     className="w-full bg-[#050505]/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-white/30 focus:bg-white/[0.02] transition-all duration-300"
                   />
@@ -276,6 +292,8 @@ export function Contact() {
                   <label className="text-[9px] text-white/40 font-mono tracking-widest uppercase ml-1">YOUR EMAIL</label>
                   <input 
                     type="email" 
+                    name="email"
+                    required
                     placeholder="Your email address"
                     className="w-full bg-[#050505]/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-white/30 focus:bg-white/[0.02] transition-all duration-300"
                   />
@@ -286,6 +304,8 @@ export function Contact() {
                 <label className="text-[9px] text-white/40 font-mono tracking-widest uppercase ml-1">SUBJECT</label>
                 <input 
                   type="text" 
+                  name="subject"
+                  required
                   placeholder="How can I help you?"
                   className="w-full bg-[#050505]/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-white/30 focus:bg-white/[0.02] transition-all duration-300"
                 />
@@ -295,6 +315,8 @@ export function Contact() {
                 <label className="text-[9px] text-white/40 font-mono tracking-widest uppercase ml-1">YOUR MESSAGE</label>
                 <textarea 
                   rows={5}
+                  name="message"
+                  required
                   placeholder="Tell me about your project..."
                   className="w-full bg-[#050505]/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-white/30 focus:bg-white/[0.02] transition-all duration-300 resize-none"
                 />
@@ -302,7 +324,7 @@ export function Contact() {
 
               {/* Submit Button */}
               <button 
-                type="button" 
+                type="submit" 
                 className="form-element group relative w-full mt-4 p-1 rounded-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/10 overflow-hidden hover:border-white/30 transition-colors duration-500"
               >
                 {/* Glowing flare inside button */}
