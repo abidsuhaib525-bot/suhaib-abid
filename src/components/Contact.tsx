@@ -1,10 +1,10 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { Mail, Phone, MapPin, Clock, ArrowRight, Zap, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, ArrowRight, Zap, Send, CheckCircle2 } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,6 +44,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 export function Contact() {
   const containerRef = useRef<HTMLElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -263,18 +264,13 @@ export function Contact() {
             {/* Form */}
             <form 
               ref={formRef} 
-              className="flex flex-col gap-5"
+              className="flex flex-col gap-5 relative"
               onSubmit={async (e) => {
                 e.preventDefault();
-                const form = e.currentTarget;
-                const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
-                const originalText = button.querySelector('span')!.innerText;
+                setFormStatus('submitting');
                 
                 try {
-                  button.disabled = true;
-                  button.querySelector('span')!.innerText = 'SENDING...';
-                  
-                  const formData = new FormData(form);
+                  const formData = new FormData(e.currentTarget);
                   const res = await fetch("https://formsubmit.co/ajax/abidsuhaib525@gmail.com", {
                     method: "POST",
                     body: formData
@@ -282,16 +278,16 @@ export function Contact() {
                   
                   const result = await res.json();
                   if (result.success) {
-                    alert("Message sent successfully!");
-                    form.reset();
+                    setFormStatus('success');
+                    formRef.current?.reset();
+                    setTimeout(() => setFormStatus('idle'), 5000);
                   } else {
-                    alert("Something went wrong. Please try again.");
+                    setFormStatus('error');
+                    setTimeout(() => setFormStatus('idle'), 5000);
                   }
                 } catch (error) {
-                  alert("Error sending message. Please try again later.");
-                } finally {
-                  button.disabled = false;
-                  button.querySelector('span')!.innerText = originalText;
+                  setFormStatus('error');
+                  setTimeout(() => setFormStatus('idle'), 5000);
                 }
               }}
             >
@@ -347,7 +343,8 @@ export function Contact() {
               {/* Submit Button */}
               <button 
                 type="submit" 
-                className="form-element group relative w-full mt-4 p-1 rounded-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/10 overflow-hidden hover:border-white/30 transition-colors duration-500"
+                disabled={formStatus === 'submitting' || formStatus === 'success'}
+                className="form-element group relative w-full mt-4 p-1 rounded-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/10 overflow-hidden hover:border-white/30 transition-colors duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {/* Glowing flare inside button */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></div>
@@ -355,13 +352,30 @@ export function Contact() {
 
                 <div className="relative w-full bg-[#030303] rounded-lg px-6 py-4 flex items-center justify-center gap-6">
                   <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center bg-white/[0.02] group-hover:bg-white group-hover:text-black transition-colors duration-500">
-                    <ArrowRight className="w-4 h-4" />
+                    {formStatus === 'success' ? (
+                      <CheckCircle2 className="w-4 h-4 text-green-400" />
+                    ) : (
+                      <ArrowRight className="w-4 h-4" />
+                    )}
                   </div>
                   <span className="text-xs font-mono tracking-[0.3em] uppercase text-white/80 group-hover:text-white transition-colors duration-500">
-                    SEND MESSAGE
+                    {formStatus === 'submitting' ? 'SENDING...' : formStatus === 'success' ? 'SENT!' : 'SEND MESSAGE'}
                   </span>
                 </div>
               </button>
+
+              {/* In-UI Notification Toast */}
+              {formStatus === 'success' && (
+                <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full bg-green-500/10 border border-green-500/20 backdrop-blur-md flex items-center gap-3 transition-all duration-300">
+                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                  <span className="text-xs text-green-100 font-medium tracking-wide">Message sent successfully!</span>
+                </div>
+              )}
+              {formStatus === 'error' && (
+                <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-md flex items-center gap-3 transition-all duration-300">
+                  <span className="text-xs text-red-100 font-medium tracking-wide">Error sending message. Please try again.</span>
+                </div>
+              )}
 
             </form>
           </div>
