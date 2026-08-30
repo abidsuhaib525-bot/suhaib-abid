@@ -264,18 +264,40 @@ export function Contact() {
             <form 
               ref={formRef} 
               className="flex flex-col gap-5"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const name = formData.get('name');
-                const email = formData.get('email');
-                const subject = formData.get('subject');
-                const message = formData.get('message');
+                const form = e.currentTarget;
+                const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+                const originalText = button.querySelector('span')!.innerText;
                 
-                const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0AMessage:%0D%0A${message}`;
-                window.location.href = `mailto:abidsuhaib525@gmail.com?subject=${encodeURIComponent(subject as string)}&body=${body}`;
+                try {
+                  button.disabled = true;
+                  button.querySelector('span')!.innerText = 'SENDING...';
+                  
+                  const formData = new FormData(form);
+                  const res = await fetch("https://formsubmit.co/ajax/abidsuhaib525@gmail.com", {
+                    method: "POST",
+                    body: formData
+                  });
+                  
+                  const result = await res.json();
+                  if (result.success) {
+                    alert("Message sent successfully!");
+                    form.reset();
+                  } else {
+                    alert("Something went wrong. Please try again.");
+                  }
+                } catch (error) {
+                  alert("Error sending message. Please try again later.");
+                } finally {
+                  button.disabled = false;
+                  button.querySelector('span')!.innerText = originalText;
+                }
               }}
             >
+              {/* FormSubmit Config */}
+              <input type="hidden" name="_subject" value="New Message from Portfolio!" />
+              <input type="hidden" name="_captcha" value="false" />
               
               <div className="flex flex-col md:flex-row gap-5">
                 <div className="form-element flex-1 flex flex-col gap-2">
