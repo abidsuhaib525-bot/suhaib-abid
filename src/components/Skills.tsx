@@ -179,13 +179,13 @@ export function Skills() {
         </div>
 
         {/* Mobile Background */}
-        <div className="md:hidden absolute top-[5vh] right-0 w-[180vw] h-[180vw] opacity-80">
+        <div className="md:hidden absolute inset-0 opacity-80">
           <Image 
             src="/skill.png" 
             alt="Cinematic Space Floating Crystals Mobile" 
             fill 
             priority
-            className="object-contain object-right"
+            className="object-cover object-[80%_center]"
           />
         </div>
 

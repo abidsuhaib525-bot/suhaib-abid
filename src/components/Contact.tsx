@@ -344,21 +344,20 @@ export function Contact() {
               <button 
                 type="submit" 
                 disabled={formStatus === 'submitting' || formStatus === 'success'}
-                className="form-element group relative w-full mt-4 p-1 rounded-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/10 overflow-hidden hover:border-white/30 transition-colors duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="form-element group relative w-full mt-4 p-[1px] rounded-xl bg-white/[0.02] border border-white/10 overflow-hidden hover:border-white/30 hover:bg-white/[0.05] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-none hover:shadow-[0_0_15px_rgba(255,255,255,0.03)]"
               >
-                {/* Glowing flare inside button */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-1 bg-white/20 blur-[15px] rounded-full group-hover:bg-white/40 transition-colors duration-500"></div>
+                {/* Minimal Light Sweep */}
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
 
-                <div className="relative w-full bg-[#030303] rounded-lg px-6 py-4 flex items-center justify-center gap-6">
-                  <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center bg-white/[0.02] group-hover:bg-white group-hover:text-black transition-colors duration-500">
+                <div className="relative w-full bg-[#030303] rounded-[11px] px-6 py-4 flex items-center justify-center gap-6">
+                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.02] group-hover:bg-white transition-colors duration-300">
                     {formStatus === 'success' ? (
-                      <CheckCircle2 className="w-4 h-4 text-green-400" />
+                      <CheckCircle2 className="w-4 h-4 text-green-400 group-hover:text-green-600 transition-colors" />
                     ) : (
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 text-white/50 group-hover:text-black group-hover:translate-x-1 transition-all duration-300" />
                     )}
                   </div>
-                  <span className="text-xs font-mono tracking-[0.3em] uppercase text-white/80 group-hover:text-white transition-colors duration-500">
+                  <span className="text-xs font-mono tracking-[0.3em] uppercase text-white/60 group-hover:text-white transition-colors duration-300">
                     {formStatus === 'submitting' ? 'SENDING...' : formStatus === 'success' ? 'SENT!' : 'SEND MESSAGE'}
                   </span>
                 </div>

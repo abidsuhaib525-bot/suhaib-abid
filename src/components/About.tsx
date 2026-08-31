@@ -16,10 +16,10 @@ export function About() {
     const isMobile = window.innerWidth < 768;
     
     // Softer minimum opacities for better readability outside focus zone
-    const mainStatementOpacity = isMobile ? 0.5 : 0.35;
-    const paragraphOpacity = isMobile ? 0.6 : 0.45;
-    const itemsOpacity = isMobile ? 0.55 : 0.4;
-    const quoteOpacity = isMobile ? 0.7 : 0.55;
+    const mainStatementOpacity = isMobile ? 0.65 : 0.5;
+    const paragraphOpacity = isMobile ? 0.75 : 0.6;
+    const itemsOpacity = isMobile ? 0.65 : 0.5;
+    const quoteOpacity = isMobile ? 0.8 : 0.65;
 
     const ctx = gsap.context(() => {
       // 1. Initial Entry Reveal (Staggered Fade-Up)
@@ -163,14 +163,13 @@ export function About() {
         </div>
 
         {/* Mobile-Specific Background Layer (Art-Directed for 9:16) */}
-        {/* Image moved to the TOP for mobile view as requested */}
-        <div className="md:hidden absolute top-0 right-0 w-[140vw] h-[140vw] opacity-90">
+        <div className="md:hidden absolute inset-0 opacity-90">
           <Image 
             src="/about.png" 
             alt="Cinematic Space Environment Mobile" 
             fill 
             priority
-            className="object-contain object-right-top"
+            className="object-cover object-[75%_top]"
           />
         </div>
 

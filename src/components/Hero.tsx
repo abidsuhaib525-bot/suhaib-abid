@@ -129,14 +129,13 @@ export function Hero() {
         </div>
 
         {/* Mobile-Specific Background Layer (Art-Directed for 9:16) */}
-        {/* Uses a 150vw container, nudged even higher up as requested */}
-        <div className="md:hidden absolute bottom-[15vh] -right-[15vw] w-[150vw] h-[150vw] opacity-90">
+        <div className="md:hidden absolute inset-0 opacity-90">
           <Image 
             src="/hero.png" 
             alt="Cinematic Space Landscape Mobile" 
             fill 
             priority 
-            className="object-contain object-right-bottom" 
+            className="object-cover object-[65%_top]" 
           />
         </div>
         
@@ -164,15 +163,15 @@ export function Hero() {
           <div className="eyebrow-reveal mb-10 flex items-center gap-6 opacity-0">
             <div className="w-6 h-[1px] bg-white"></div>
             <p className="text-white text-[9px] md:text-[10px] font-medium tracking-[0.4em] uppercase">
-              Developer <span className="mx-3 opacity-30">•</span> Cybersecurity <span className="mx-3 opacity-30">•</span> Designer
+              Developer <span className="mx-3 opacity-30">•</span> Cybersecurity <span className="mx-3 opacity-30">•</span> Designer <span className="mx-3 opacity-30">•</span> AI Student
             </p>
           </div>
           
           <div className="flex flex-col gap-2 md:gap-4 mb-12 overflow-hidden">
-            <h1 ref={nameRef1} className="font-sans text-[70px] sm:text-[80px] md:text-[130px] lg:text-[180px] font-bold tracking-tight text-white leading-[0.9] opacity-0">
+            <h1 ref={nameRef1} className="font-sans text-[70px] sm:text-[80px] md:text-[130px] lg:text-[180px] font-bold tracking-tight text-white leading-none opacity-0">
               SUHAIB
             </h1>
-            <h1 ref={nameRef2} className="font-sans text-[70px] sm:text-[80px] md:text-[130px] lg:text-[180px] font-bold tracking-tight text-white leading-[0.9] opacity-0">
+            <h1 ref={nameRef2} className="font-sans text-[70px] sm:text-[80px] md:text-[130px] lg:text-[180px] font-bold tracking-tight text-white leading-none opacity-0">
               ABID
             </h1>
           </div>

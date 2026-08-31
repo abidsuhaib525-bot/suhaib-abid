@@ -80,15 +80,15 @@ export function CustomCursor() {
       <div
         ref={dotRef}
         className={clsx(
-          "fixed top-0 left-0 pointer-events-none z-[100] w-1.5 h-1.5 bg-white rounded-full mix-blend-difference transition-transform duration-200",
-          isHovering ? "scale-[2]" : "scale-100"
+          "fixed top-0 left-0 pointer-events-none z-[100] bg-white rounded-full mix-blend-difference transition-[width,height,background-color] duration-200",
+          isHovering ? "w-3 h-3" : "w-1.5 h-1.5"
         )}
       />
       
       <div
         ref={ringRef}
         className={clsx(
-          "fixed top-0 left-0 pointer-events-none z-[90] rounded-full border border-white/40 transition-all duration-300 ease-out",
+          "fixed top-0 left-0 pointer-events-none z-[90] rounded-full border border-white/40 transition-[width,height,background-color,border-color] duration-300 ease-out",
           isHovering ? "w-12 h-12 bg-white/5 border-white/60" : "w-6 h-6 bg-transparent"
         )}
       />

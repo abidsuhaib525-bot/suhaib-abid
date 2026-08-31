@@ -167,14 +167,13 @@ export function Education() {
         </div>
 
         {/* Mobile-Specific Background Layer (Art-Directed for 9:16) */}
-        {/* Uses a 120vw container to prevent massive zooming, keeping moon small and distant */}
-        <div className="md:hidden absolute top-[15vh] right-0 w-[120vw] h-[120vw] opacity-90">
+        <div className="md:hidden absolute inset-0 opacity-90">
           <Image 
             src="/education.png" 
             alt="Sci-Fi Cinematic Planet Behind Mountains Mobile" 
             fill 
             priority
-            className="object-contain object-right"
+            className="object-cover object-[80%_center]"
           />
         </div>
         
