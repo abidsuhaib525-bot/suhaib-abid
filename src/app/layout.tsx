@@ -16,8 +16,37 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Suhaib Abid — Developer, Cybersecurity & Designer",
-  description: "Suhaib Abid — full-stack developer and designer based in Faisalabad, Pakistan. Working remotely worldwide on web design, full-stack development, UI/UX, branding, motion, and SEO.",
+  metadataBase: new URL('https://suhaib-abid.pages.dev'),
+  title: {
+    default: "Suhaib Abid — Developer, Cybersecurity & Designer",
+    template: "%s | Suhaib Abid"
+  },
+  description: "Suhaib Abid is a full-stack developer, AI student, and designer based in Pakistan. Specializing in high-performance web applications, UI/UX, and secure systems.",
+  keywords: ["Suhaib Abid", "Full-stack Developer", "Cybersecurity", "UI/UX Designer", "AI Student", "React Developer", "Next.js", "Pakistan"],
+  authors: [{ name: "Suhaib Abid" }],
+  creator: "Suhaib Abid",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://suhaib-abid.pages.dev/",
+    title: "Suhaib Abid — Developer, Cybersecurity & Designer",
+    description: "Full-stack developer, AI student, and designer specializing in high-performance web applications and secure systems.",
+    siteName: "Suhaib Abid Portfolio",
+    images: [
+      {
+        url: "/hero.png", // Using the hero image as default OG image
+        width: 1200,
+        height: 630,
+        alt: "Suhaib Abid Portfolio",
+      }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Suhaib Abid — Developer, Cybersecurity & Designer",
+    description: "Full-stack developer, AI student, and designer specializing in high-performance web applications and secure systems.",
+    images: ["/hero.png"],
+  },
 };
 
 export default function RootLayout({
