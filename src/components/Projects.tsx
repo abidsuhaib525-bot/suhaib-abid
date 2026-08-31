@@ -46,12 +46,12 @@ export function Projects() {
         {
           scrollTrigger: {
             trigger: ".section-intro",
-            start: "top 75%",
+            start: "top 95%",
           },
           y: 0,
           opacity: 1,
           stagger: 0.15,
-          duration: 1.2,
+          duration: 0.8,
           ease: "power3.out",
         }
       );
@@ -66,7 +66,7 @@ export function Projects() {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: block,
-            start: "top 70%",
+            start: "top 95%",
             toggleActions: "play none none reverse",
           }
         });

@@ -29,11 +29,11 @@ export function About() {
         {
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top 75%",
+            start: "top 95%",
           },
           y: 0,
           opacity: 1,
-          duration: 1.2,
+          duration: 0.8,
           stagger: 0.15,
           ease: "power2.out",
         }

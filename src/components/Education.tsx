@@ -79,11 +79,11 @@ export function Education() {
         {
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top 75%",
+            start: "top 95%",
           },
           y: 0,
           opacity: 1,
-          duration: 1.2,
+          duration: 0.8,
           stagger: 0.15,
           ease: "power2.out",
         }
@@ -111,7 +111,7 @@ export function Education() {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: el,
-            start: "top 80%",
+            start: "top 95%",
             end: "bottom 20%",
             scrub: true,
           }
@@ -132,11 +132,11 @@ export function Education() {
         {
           scrollTrigger: {
             trigger: ".edu-highlights",
-            start: "top 90%",
+            start: "top 95%",
           },
           y: 0,
           opacity: 1,
-          duration: 1.2,
+          duration: 0.8,
           ease: "power3.out",
         }
       );

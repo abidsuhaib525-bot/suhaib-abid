@@ -67,12 +67,12 @@ export function Contact() {
         {
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top 75%",
+            start: "top 95%",
           },
           y: 0,
           opacity: 1,
           stagger: 0.1,
-          duration: 1,
+          duration: 0.8,
           ease: "power3.out",
         }
       );
@@ -84,11 +84,11 @@ export function Contact() {
         {
           scrollTrigger: {
             trigger: ".contact-form-panel",
-            start: "top 80%",
+            start: "top 95%",
           },
           x: 0,
           opacity: 1,
-          duration: 1.2,
+          duration: 0.8,
           ease: "power3.out",
         }
       );
@@ -100,14 +100,14 @@ export function Contact() {
         {
           scrollTrigger: {
             trigger: ".contact-form-panel",
-            start: "top 70%",
+            start: "top 95%",
           },
           y: 0,
           opacity: 1,
           stagger: 0.1,
-          duration: 0.8,
+          duration: 0.6,
           ease: "power2.out",
-          delay: 0.2
+          delay: 0.1
         }
       );
       
@@ -118,12 +118,12 @@ export function Contact() {
         {
           scrollTrigger: {
             trigger: ".contact-extras",
-            start: "top 95%",
+            start: "top bottom",
           },
           y: 0,
           opacity: 1,
           stagger: 0.1,
-          duration: 1,
+          duration: 0.8,
           ease: "power2.out",
         }
       );

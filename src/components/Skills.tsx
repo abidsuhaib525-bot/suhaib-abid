@@ -84,11 +84,11 @@ export function Skills() {
         {
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top 75%",
+            start: "top 95%",
           },
           y: 0,
           opacity: 1,
-          duration: 1.2,
+          duration: 0.8,
           stagger: 0.15,
           ease: "power2.out",
         }
@@ -100,7 +100,7 @@ export function Skills() {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: card,
-            start: "top 85%",
+            start: "top 95%",
           }
         });
 
@@ -126,11 +126,11 @@ export function Skills() {
         {
           scrollTrigger: {
             trigger: ".strengths-panel",
-            start: "top 90%",
+            start: "top 95%",
           },
           y: 0,
           opacity: 1,
-          duration: 1.5,
+          duration: 0.8,
           ease: "power3.out",
         }
       );
@@ -142,14 +142,14 @@ export function Skills() {
         {
           scrollTrigger: {
             trigger: ".strengths-panel",
-            start: "top 85%",
+            start: "top 95%",
           },
           y: 0,
           opacity: 1,
-          duration: 1,
+          duration: 0.8,
           stagger: 0.1,
           ease: "power2.out",
-          delay: 0.2
+          delay: 0.1
         }
       );
 
