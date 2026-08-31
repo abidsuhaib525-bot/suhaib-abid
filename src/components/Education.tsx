@@ -158,7 +158,7 @@ export function Education() {
         {/* Desktop Background Layer */}
         <div className="hidden md:block absolute inset-0">
           <Image 
-            src="/education.png" 
+            src="/education.webp" 
             alt="Sci-Fi Cinematic Planet Behind Mountains" 
             fill 
             priority
@@ -169,7 +169,7 @@ export function Education() {
         {/* Mobile-Specific Background Layer (Art-Directed for 9:16) */}
         <div className="md:hidden absolute inset-0 opacity-90">
           <Image 
-            src="/education.png" 
+            src="/education.webp" 
             alt="Sci-Fi Cinematic Planet Behind Mountains Mobile" 
             fill 
             priority

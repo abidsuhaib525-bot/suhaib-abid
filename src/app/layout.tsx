@@ -57,8 +57,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable} dark`} style={{ colorScheme: 'dark' }}>
       <body className="min-h-screen bg-brand-black text-brand-white selection:bg-brand-white selection:text-brand-black overflow-x-hidden antialiased flex flex-col">
-        {/* Film Grain Texture Overlay */}
-        <div className="fixed inset-0 z-[100] pointer-events-none opacity-5 mix-blend-overlay bg-[url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Dissolve_Noise_Texture.png')] bg-repeat" />
+        {/* Film Grain Texture Overlay (SVG Noise) */}
+        <svg className="fixed inset-0 z-[100] pointer-events-none opacity-[0.03] mix-blend-screen w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <filter id="noiseFilter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+        </svg>
         
         <CustomCursor />
         {children}

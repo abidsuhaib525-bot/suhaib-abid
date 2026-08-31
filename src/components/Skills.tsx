@@ -170,7 +170,7 @@ export function Skills() {
         {/* Desktop Background with Parallax Ref */}
         <div ref={bgImageRef} className="hidden md:block absolute inset-[-5%] w-[110%] h-[110%]">
           <Image 
-            src="/skill.png" 
+            src="/skill.webp" 
             alt="Cinematic Space Floating Crystals" 
             fill 
             priority
@@ -181,7 +181,7 @@ export function Skills() {
         {/* Mobile Background */}
         <div className="md:hidden absolute inset-0 opacity-80">
           <Image 
-            src="/skill.png" 
+            src="/skill.webp" 
             alt="Cinematic Space Floating Crystals Mobile" 
             fill 
             priority

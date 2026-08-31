@@ -154,7 +154,7 @@ export function About() {
         {/* Desktop Background Layer */}
         <div className="hidden md:block absolute inset-0">
           <Image 
-            src="/about.png" 
+            src="/about.webp" 
             alt="Cinematic Space Environment" 
             fill 
             priority
@@ -165,7 +165,7 @@ export function About() {
         {/* Mobile-Specific Background Layer (Art-Directed for 9:16) */}
         <div className="md:hidden absolute inset-0 opacity-90">
           <Image 
-            src="/about.png" 
+            src="/about.webp" 
             alt="Cinematic Space Environment Mobile" 
             fill 
             priority

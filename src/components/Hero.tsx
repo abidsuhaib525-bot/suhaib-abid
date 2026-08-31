@@ -120,7 +120,7 @@ export function Hero() {
         {/* Desktop Background Layer */}
         <div className="hidden md:block absolute inset-0">
           <Image 
-            src="/hero.png" 
+            src="/hero.webp" 
             alt="Cinematic Space Landscape" 
             fill 
             priority 
@@ -131,7 +131,7 @@ export function Hero() {
         {/* Mobile-Specific Background Layer (Art-Directed for 9:16) */}
         <div className="md:hidden absolute inset-0 opacity-90">
           <Image 
-            src="/hero.png" 
+            src="/hero.webp" 
             alt="Cinematic Space Landscape Mobile" 
             fill 
             priority 

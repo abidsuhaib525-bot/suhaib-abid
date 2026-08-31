@@ -143,7 +143,7 @@ export function Contact() {
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="contact-bg absolute inset-[-10%] w-[120%] h-[120%]">
           <Image 
-            src="/contact.png" 
+            src="/contact.webp" 
             alt="Cinematic Space Surface" 
             fill 
             priority

@@ -123,7 +123,7 @@ export function Projects() {
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="projects-bg absolute inset-[-10%] w-[120%] h-[120%]">
           <Image 
-            src="/project.png" 
+            src="/project.webp" 
             alt="Space Aesthetic" 
             fill 
             priority
